@@ -36,9 +36,13 @@ private static WebDriver driver;
 	
 	public void login(String userId, String password) {
 		BaseClass bc= new BaseClass(driver);
-		bc.sendKeys(login, userId);
+		bc.hardWait(3000);
+		bc.sendKeys(userName, userId);
+		bc.hardWait(3000);
 		bc.sendKeys(this.password, password);
+		bc.hardWait(3000);
 		bc.takeScreenShot("LoginPage");
+		bc.hardWait(3000);
 		bc.clickUsingJavaScript(login);
 	}
 	

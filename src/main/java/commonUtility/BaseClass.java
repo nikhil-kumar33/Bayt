@@ -76,7 +76,8 @@ public class BaseClass {
 
 	public void takeScreenShot(String pageName) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("document.body.style.zoom = '0.50'", "");
+		js.executeScript("window.scrollBy(0,-document.body.scrollHeight)", "");
+		js.executeScript("document.body.style.zoom = '0.40'", "");
         try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {

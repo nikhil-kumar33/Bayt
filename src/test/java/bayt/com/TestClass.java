@@ -1,11 +1,14 @@
 package bayt.com;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -31,13 +34,15 @@ public class TestClass {
 		System.setProperty("webdriver.chrome.driver",
 				System.getProperty("user.dir") + "\\src\\test\\resources\\drivers\\chromedriver.exe");
 
-		driver = new ChromeDriver();
+		
 		
 	}
 	
 	// Test Case with duplicate email id
-	@Test(dataProvider="data")
+	@Test(dataProvider="data", enabled=true,priority=1)
 	public void createProfile(String firstName, String lastName, String email, String password, String mobile) {
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
 		HomePage hpage= new HomePage(driver);
 		hpage.clickAboutUsElement();
 		ApplyJobsPage apage= new ApplyJobsPage(driver);
@@ -69,7 +74,8 @@ public class TestClass {
 	
 	@DataProvider(name="data")
 	public Object[][] data(){
-		Object[][] ob= {{"Test", "Data", "nikhilmishra01091998@gmail.com", "TestData@1976", "123456789"},
+		//uncomment below to check the validity of email
+		Object[][] ob= {/*{"Test", "Data", "nikhilmishra01091998@gmail.com", "TestData@1976", "123456789"},*/
 				{"Test", "Data", "TestData235@gmail.com", "TestData@1976", "123456789"}};
 		
 		return ob;
@@ -79,6 +85,7 @@ public class TestClass {
 	
 	@Test(dependsOnMethods="createProfile")
 	public void deleteProfile() {
+		driver = new ChromeDriver();
 		LoginPage lpage= new LoginPage(driver);
 		lpage.login("TestData235@gmail.com", "TestData@1976");
 		ProfilePage ppage= new ProfilePage(driver);
@@ -87,8 +94,17 @@ public class TestClass {
 		apage.deleteAccount();
 	}
 	
-	@Test()
+	@Test(enabled=true,priority=2)
 	public void applyOnMobilePage() {
+		
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--window-size=400,800");
+		Map<String, Object> mobileEmulation = new HashMap<String, Object>();
+		mobileEmulation.put("deviceName", "iPhone 6");
+		options.setExperimentalOption("mobileEmulation", mobileEmulation);
+		driver = new ChromeDriver(options);
+		HomePage hpage= new HomePage(driver);
+		hpage.searchForJobAndApply("Quality Assurance Engineer", "United Arab Emirates");
 		
 	}
 	
